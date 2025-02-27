@@ -1,80 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AlertCircle, Briefcase, ChevronRight, FileText, Home, Settings, User, Bell } from 'lucide-react';
+import { useJobList } from '../hooks/useJobList';
 
 const AdminDashboard = () => {
-  // Sample job data - in a real app, this would come from an API
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { jobs, loading, error, refreshJobs } = useJobList();
   const [activeMenu, setActiveMenu] = useState('jobs');
-
-  useEffect(() => {
-    // Simulate API call to fetch jobs
-    setTimeout(() => {
-      setJobs([
-        {
-          id: 1,
-          title: "Senior Frontend Developer",
-          company: "TechCorp Inc.",
-          location: "San Francisco, CA",
-          type: "Full-time",
-          salary: "$120,000 - $150,000",
-          posted: "2025-02-24T08:30:00",
-          platform: "LinkedIn",
-          matchScore: 92,
-          isNew: true,
-        },
-        {
-          id: 2,
-          title: "Backend Engineer",
-          company: "DataFlow Systems",
-          location: "Remote",
-          type: "Full-time",
-          salary: "$115,000 - $135,000",
-          posted: "2025-02-24T10:15:00",
-          platform: "Indeed",
-          matchScore: 87,
-          isNew: true,
-        },
-        {
-          id: 3,
-          title: "Full Stack Developer",
-          company: "Innovate Solutions",
-          location: "New York, NY",
-          type: "Full-time",
-          salary: "$110,000 - $140,000",
-          posted: "2025-02-23T14:45:00",
-          platform: "Glassdoor",
-          matchScore: 78,
-          isNew: false,
-        },
-        {
-          id: 4,
-          title: "DevOps Engineer",
-          company: "Cloud Systems Ltd",
-          location: "Chicago, IL",
-          type: "Full-time",
-          salary: "$125,000 - $145,000",
-          posted: "2025-02-23T09:30:00",
-          platform: "LinkedIn",
-          matchScore: 65,
-          isNew: false,
-        },
-        {
-          id: 5,
-          title: "Machine Learning Engineer",
-          company: "AI Innovations",
-          location: "Remote",
-          type: "Full-time",
-          salary: "$130,000 - $160,000",
-          posted: "2025-02-22T16:20:00",
-          platform: "Indeed",
-          matchScore: 71,
-          isNew: false,
-        }
-      ]);
-      setLoading(false);
-    }, 1000);
-  }, []);
 
   // Format date to relative time (e.g., "2 hours ago")
   const formatRelativeTime = (dateString) => {
@@ -177,7 +107,10 @@ const AdminDashboard = () => {
           </h2>
           
           <div className="flex space-x-4">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <button 
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              onClick={refreshJobs}
+            >
               Refresh Jobs
             </button>
           </div>
@@ -280,6 +213,12 @@ const AdminDashboard = () => {
                 {activeMenu.charAt(0).toUpperCase() + activeMenu.slice(1)} Section
               </h3>
               <p className="text-gray-500">This section is under development.</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="bg-red-50 text-red-800 p-4 rounded-lg mb-4">
+              {error}
             </div>
           )}
         </main>
